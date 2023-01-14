@@ -4,7 +4,7 @@ const chalk = require("chalk");
 
 // Config
 
-const API_KEY = "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";
+const API_KEY = "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";
 const configuration = new Configuration({
   organization: "org-8XgaqbFgRqUDio8odgHi8td1",
   apiKey: API_KEY,
