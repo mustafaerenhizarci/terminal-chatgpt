@@ -2,26 +2,28 @@ const { Configuration, OpenAIApi } = require("openai");
 var prompt = require("prompt-sync")();
 const chalk = require("chalk");
 
-// Config
-
-const API_KEY = "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";
 const configuration = new Configuration({
-  organization: "org-8XgaqbFgRqUDio8odgHi8td1",
-  apiKey: API_KEY,
+  organization: prompt("Enter Organization Key: "),
+  apiKey: prompt("Enter API Key: "),
 });
-const openai = new OpenAIApi(configuration);
+
+var openai = new OpenAIApi(configuration);
 
 // Functions
 async function getData(text = "") {
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: text,
-    temperature: 0,
-    max_tokens: 1000,
-  });
-
-  console.log("Answer: ");
-  return response.data.choices[0].text;
+  try {
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: text,
+      temperature: 0,
+      max_tokens: 1000,
+    });
+    console.log("Answer: ");
+    return response.data.choices[0].text;
+  } catch (error) {
+    console.log(chalk.redBright("There is a error check api key or organization key!"));
+    return -1;
+  }
 }
 
 function clearChat() {
@@ -42,8 +44,13 @@ async function main() {
       continue;
     }
 
+    const data = await getData(input);
+    if (data == -1) {
+      break;
+    }
+
     console.log(chalk.gray("Loading..."));
-    console.log(chalk.magentaBright(await getData(input), "\n"));
+    console.log(chalk.magentaBright(data, "\n"));
   }
 }
 main();
